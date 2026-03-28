@@ -1,4 +1,4 @@
-FROM ubuntu:noble AS builder
+FROM alpine AS builder
 
 ARG MM_VERSION
 ENV MM_VERSION=${MM_VERSION}
@@ -7,9 +7,6 @@ ENV SENTRY_ENABLED=${SENTRY_ENABLED}
 
 WORKDIR /app
 
-RUN apt-get update && \
-  apt-get install curl ca-certificates -y --no-install-recommends && \
-  apt-get clean
 ADD  "https://github.com/MegaMek/megamek/releases/download/v${MM_VERSION}/megamek-${MM_VERSION}.tar.gz" /tmp/megamek.tar.gz
 RUN tar -zxvf /tmp/megamek.tar.gz && mv MegaMek-${MM_VERSION} megamek && \
   mv megamek/docs/mm-revision.txt /app/mm-revision.txt && \
@@ -38,6 +35,8 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
   && apt-get -q full-upgrade -y \
   && apt-get clean && \
   useradd --user-group --create-home --system --skel /dev/null --home-dir /app megamek
+
+USER megamek
 
 COPY --from=builder --chown=megamek:megamek /app/megamek/ /app/
 

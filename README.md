@@ -2,7 +2,15 @@
 
 This repo is to aid in setting up and running a dedicate MegaMek server as a container. The Dockerfile is set to automatically download the latest released version.
 
-## Build the docker container to run dedicate server
+## Run Docker Hub container
+
+Sentry is enabled on Docker Hub images.
+
+```bash
+docker run --rm -d -p 2346:2346 -v ./userdata:/app/userdata tapenvyus/megamek
+```
+
+## Build the docker container to run dedicated server
 
 ```bash
 docker build --build-arg MM_VERSION=<version to build> --build-arg SENTRY_ENABLED=<true or false> --tag megamek:<version> .

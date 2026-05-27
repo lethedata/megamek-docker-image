@@ -27,15 +27,14 @@ RUN tar -zxvf /tmp/megamek.tar.gz && mv MegaMek-${MM_VERSION} megamek && \
 
 FROM eclipse-temurin:21-noble
 
-WORKDIR /app
-EXPOSE 2346
-
 RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true \
   && apt-get -q update \
   && apt-get -q full-upgrade -y \
   && apt-get clean && \
   useradd --user-group --create-home --system --skel /dev/null --home-dir /app megamek
 
+WORKDIR /app
+EXPOSE 2346
 USER megamek
 
 COPY --from=builder --chown=megamek:megamek /app/megamek/ /app/
